@@ -77,6 +77,27 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 700; line-hei
 @media (min-width: 768px) { .container { padding: 0 24px; } }
 @media (min-width: 1280px) { .container { padding: 0 32px; } }
 
+/* ─── Top Bar (above navbar) ─────────────────────────── */
+.top-bar {
+  background: var(--secondary);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.78rem;
+  padding: 10px 0;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.top-bar a { color: rgba(255,255,255,0.85); transition: var(--transition); }
+.top-bar a:hover { color: white; }
+.top-bar-links { display: flex; gap: 20px; align-items: center; }
+.top-bar-links .sep { color: rgba(255,255,255,0.3); }
+
 /* ─── Navbar ─────────────────────────────────────────── */
 .navbar {
   position: sticky;
@@ -84,8 +105,9 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 700; line-hei
   z-index: 1000;
   background: var(--white);
   border-bottom: 1px solid var(--gray-200);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   height: var(--navbar-height);
+  margin-top: 0;
 }
 
 .navbar-inner {
@@ -93,7 +115,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 700; line-hei
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  gap: 16px;
+  margin-top: 10px;
+  gap: 8px;
 }
 
 .navbar-logo {
@@ -215,31 +238,74 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); font-weight: 700; line-hei
 
 .navbar-hamburger {
   display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   font-size: 22px;
   color: var(--gray-700);
   padding: 4px;
   border-radius: var(--radius);
+  flex-shrink: 0;
 }
 
-/* ─── Top Bar (above navbar) ─────────────────────────── */
-.top-bar {
-  background: var(--secondary);
-  color: rgba(255,255,255,0.85);
-  font-size: 0.78rem;
-  padding: 6px 0;
+/* ─── Mobile Search Bar (below navbar on small screens) ── */
+.mobile-search-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 8px 0;
+  display: none;
 }
 
-.top-bar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+.mobile-search-bar .mobile-search-inner {
+  position: relative;
 }
 
-.top-bar a { color: rgba(255,255,255,0.85); transition: var(--transition); }
-.top-bar a:hover { color: white; }
-.top-bar-links { display: flex; gap: 20px; align-items: center; }
-.top-bar-links .sep { color: rgba(255,255,255,0.3); }
+.mobile-search-bar input {
+  width: 100%;
+  padding: 9px 80px 9px 38px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  background: var(--gray-50);
+  outline: none;
+  transition: var(--transition);
+}
+
+.mobile-search-bar input:focus {
+  border-color: var(--primary);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(196,30,58,0.1);
+}
+
+.mobile-search-bar .mobile-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.mobile-search-bar .mobile-search-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 5px 14px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.mobile-search-bar .mobile-search-btn:hover { background: var(--primary-dark); }
 
 /* ─── Nav Secondary (Category bar) ──────────────────── */
 .nav-secondary {
@@ -1580,13 +1646,56 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 
 /* ─── Mobile Responsive ──────────────────────────────── */
 @media (max-width: 767px) {
+  /* Top bar hidden on mobile — too cramped */
+  .top-bar { display: none; }
+
+  /* Navbar inner: hamburger → logo tight together, actions pushed right */
+  .navbar-inner {
+    gap: 0;
+  }
+
+  /* Hamburger sits flush against logo */
+  .navbar-hamburger {
+    margin-right: 8px;
+  }
+
+  /* Logo text slightly smaller */
+  .navbar-logo .logo-text { font-size: 1.05rem; }
+  /* Tighten gap between icon and text in logo */
+  .navbar-logo { gap: 6px; }
+
+  /* Search bar hidden in navbar — shown below */
   .navbar-search { display: none; }
   .navbar-hamburger { display: flex; }
+
+  /* Sell button hidden in navbar — available in sidebar */
   .navbar-actions .navbar-sell-btn { display: none; }
-  .top-bar-links .extra-links { display: none; }
+
+  /* Actions group pushed to the right with auto margin */
+  .navbar-actions { margin-left: auto; gap: 0; }
+
+  /* WhatsApp button — compact pill with short label */
+  .navbar-whatsapp {
+    padding: 7px 11px;
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
+    gap: 5px;
+  }
+  .navbar-whatsapp i { font-size: 14px; }
+  /* Show short label on mobile */
+  .navbar-whatsapp .wa-label { display: inline; }
+
+  /* Show mobile search bar below navbar */
+  .mobile-search-bar { display: block; }
+
+  /* Hero */
   .hero { padding: 40px 0 64px; }
   .hero-stats { gap: 20px; flex-wrap: wrap; }
+
+  /* Filter bar */
   .filter-bar { padding: 16px; }
+
+  /* Footer */
   .footer-grid { grid-template-columns: 1fr; }
 }
 
